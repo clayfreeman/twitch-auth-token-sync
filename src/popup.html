@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Twitch Auth Token Sync</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    label {
+      display: block;
+      margin: 8px 0;
+    }
+
+    input {
+      padding: 8px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <h3>Twitch Auth Token Sync</h3>
+
+  <div>
+    <label for="destination">Destination:</label>
+    <input type="url" id="destination" placeholder="https://example.org" />
+
+    <label for="encrypt">Encryption key:</label>
+    <input type="password" id="encrypt" />
+
+    <label for="sign">Signing key:</label>
+    <input type="password" id="sign" />
+  </div>
+
+  <button id="save">Save</button>
+
+  <script src="./popup.js"></script>
+</body>
+</html>
