@@ -2,23 +2,6 @@ class TwitchAuthTokenSync {
 
   #iterations = 600_000;
 
-  attach = async (cookie) => {
-    const { hostname: domain } = new URL(cookie.url);
-
-    chrome.cookies.get(cookie, this.#update);
-    chrome.cookies.onChanged.addListener(({ cause, cookie: data, removed }) => {
-      if (cause === 'explicit' && !removed) {
-        if (data.domain === domain && data.name === cookie.name) {
-          this.#update(data);
-        }
-      }
-    });
-
-    chrome.storage.onChanged.addListener(() => {
-      chrome.cookies.get(cookie, this.#update);
-    });
-  }
-
   async #doDeriveKey(baseKey, salt) {
     return await crypto.subtle.deriveKey(
       {name: 'PBKDF2', iterations: this.#iterations, hash: 'SHA-256', salt},
@@ -150,16 +133,32 @@ class TwitchAuthTokenSync {
     }
   }
 
+  update = (cookie) => {
+    chrome.cookies.get(cookie, this.#update);
+  }
+
 }
 
-const initialize = async () => {
-  const sync = new TwitchAuthTokenSync();
-
-  await sync.attach({
-    url: 'https://.twitch.tv',
-    name: 'auth-token',
-  });
+// Get an instance of the class used to sync the 'auth-token' cookie value.
+const sync = new TwitchAuthTokenSync();
+const cookie = {
+  name: 'auth-token',
+  url: 'https://.twitch.tv',
 };
 
-chrome.runtime.onInstalled.addListener(initialize);
-chrome.runtime.onStartup.addListener(initialize);
+// Update the cookie when the extension is installed, on startup, or whenever
+// its configuration is changed by the user.
+chrome.runtime.onInstalled.addListener(() => sync.update(cookie));
+chrome.runtime.onStartup.addListener(() => sync.update(cookie));
+chrome.storage.onChanged.addListener(() => sync.update(cookie));
+
+// Update the cookie whenever it's changed during regular use.
+chrome.cookies.onChanged.addListener(({ cause, cookie: data, removed }) => {
+  const { hostname: domain } = new URL(cookie.url);
+
+  if (cause === 'explicit' && !removed) {
+    if (data.domain === domain && data.name === cookie.name) {
+      sync.update(cookie);
+    }
+  }
+});
