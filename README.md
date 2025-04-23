@@ -2,7 +2,14 @@
 
 A WebExtension designed to exfiltrate the `auth-token` cookie value from Twitch whenever it changes.
 
-## Building the Extension
+## Get the Extension
+
+Twitch Auth Token Sync is available on the following platforms:
+
+- [Chrome Web Store](https://chromewebstore.google.com/detail/twitch-auth-token-sync/kfedgochjdfgldkkbmjoghdbgbaambhe)
+- [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/twitch-auth-token-sync/)
+
+## Build the Extension
 
 To build the extension, run the `build.sh` script to create an `artifacts` directory containing source code and reproducible archives for both Chrome and Firefox.
 
